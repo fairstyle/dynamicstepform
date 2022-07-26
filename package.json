@@ -1,6 +1,6 @@
 {
   "name": "dynamicstepform",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Vanilla js library to create a form by steps",
   "main": "dist/dynamicstepform.js",
   "scripts": {
