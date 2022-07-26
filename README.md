@@ -10,8 +10,16 @@ npm install dynamicstepform
 
 # Usage
 
-```bash
-dynamicstepform
+```javascript
+let element = document.getElementById("stepformdiv");
+let stepform = new Dynamicstepform();
+// stepone | steptwo | stepthree - all this are id of divs
+stepform.steps([
+    {"element": "stepone", "call": () => { console.log("step 1");return true;}},
+    {"element": "steptwo", "call": () => { console.log("step 2");return true;}},
+    {"element": "stepthree", "call": () => { console.log("step 3");return true;}}
+]);
+stepform.create(element);
 ```
 
 # Contributing
