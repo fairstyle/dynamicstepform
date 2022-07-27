@@ -1,9 +1,13 @@
 class Dynamicstepform {
 
     dynamicsteps = {
-        "currentStepIndex": null,
-        "steps": null,
-        "styleMotor": "tailwindcss"
+        currentStepIndex: null,
+        steps: null,
+        styleMotor: "tailwindcss",
+        element: null,
+        elementInnerHTML: null,
+        resetEnabled: false,
+        backEnabled: false
     }
 
     constructor() {
@@ -31,12 +35,14 @@ class Dynamicstepform {
             if(createdStep !== 1)
                 document.getElementById(step.element).classList.add("hidden");
 
-            htmlContent += '<div id="dynamicstepformstatusstep'+createdStep+'" class="bg-gray-400 w-8 h-8 rounded-full text-white font-black flex justify-center items-center">'+createdStep+'</div>';
+            document.getElementById(step.element).classList.add("duration-500", "transform", "transition-transform", "translate-x-full", "z-["+createdStep+"]", "flex");
+
+            htmlContent += '<div id="dynamicstepformstatusstep'+createdStep+'" class="duration-500 bg-white border border-gray-400 w-8 h-8 rounded-full text-gray-500 font-black flex justify-center items-center">'+createdStep+'</div>';
             createdStep++;
         })
 
         htmlContent += '</div>';
-        element.innerHTML = htmlContent+element.innerHTML+nextStepButton;
+        element.innerHTML =htmlContent+"<div class='flex'>"+element.innerHTML+"</div>"+nextStepButton;
 
         this.dynamicsteps.currentStepIndex = 0;
         this.markAsCurrent(this.dynamicsteps.currentStepIndex);
@@ -48,29 +54,74 @@ class Dynamicstepform {
     }
 
     nextStep(){
-        if(!this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex].call())
+        if(this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex].call !== undefined && !this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex].call())
             return false;
+
+        if(this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex].call === undefined)
+            console.log("no validation");
 
         if(this.dynamicsteps.steps.length-1 > this.dynamicsteps.currentStepIndex){
             this.markAsDone(this.dynamicsteps.currentStepIndex);
             this.markAsCurrent(this.dynamicsteps.currentStepIndex+1);
         }
+    }
 
-        if(this.dynamicsteps.currentStepIndex === this.dynamicsteps.steps.length-1)
-            document.getElementById("dynamicstepformButtonName").innerText = "Complete";
+    backStep(){
+        this.clearStep();
+        document.getElementById(this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex].element).classList.add("hidden");
+        document.getElementById(this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex-1].element).classList.remove("-translate-x-full");
+        document.getElementById("dynamicstepformstatusstep"+(this.dynamicsteps.currentStepIndex+1)).classList.remove("bg-green-400", "bg-gray-400", "text-white");
+        document.getElementById("dynamicstepformstatusstep"+(this.dynamicsteps.currentStepIndex+1)).classList.add("bg-white", "text-gray-500", "border", "border-gray-400");
 
+        this.dynamicsteps.currentStepIndex--;
+    }
+
+    clearStep(){
+        if(this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex].clearStep !== undefined)
+            this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex].clearStep();
+    }
+
+    reset(){
+        if(this.dynamicsteps.currentStepIndex === 0){
+            this.clearStep();
+        }
+
+        if(this.dynamicsteps.currentStepIndex < 1)
+            return false;
+
+        while(this.dynamicsteps.currentStepIndex > 0){
+            this.backStep();
+        }
+
+        this.clearStep();
+        this.markAsCurrent(0);
     }
 
     markAsDone(indexStep){
         document.getElementById("dynamicstepformstatusstep"+(indexStep+1)).classList.add("bg-green-400");
-        document.getElementById("dynamicstepformstatusstep"+(indexStep+1)).classList.remove("border-gray-500", "border");
-        document.getElementById(this.dynamicsteps.steps[indexStep].element).classList.add("hidden");
+        document.getElementById("dynamicstepformstatusstep"+(indexStep+1)).classList.remove("border-gray-500", "border", "text-gray-500");
+        document.getElementById(this.dynamicsteps.steps[indexStep].element).classList.add("-translate-x-full");
+
+        setTimeout(() => {
+            document.getElementById(this.dynamicsteps.steps[indexStep].element).classList.add("hidden");
+        }, 500);
     }
 
     markAsCurrent(indexStep){
         this.dynamicsteps.currentStepIndex = indexStep;
         document.getElementById(this.dynamicsteps.steps[indexStep].element).classList.remove("hidden");
-        document.getElementById("dynamicstepformstatusstep"+(indexStep+1)).classList.add("border-gray-500", "border");
+        document.getElementById("dynamicstepformstatusstep"+(indexStep+1)).classList.add("bg-gray-400", "border");
+        document.getElementById("dynamicstepformstatusstep"+(indexStep+1)).classList.add("text-white", "border");
+        document.getElementById("dynamicstepformstatusstep"+(indexStep+1)).classList.remove("text-gray-500");
+        document.getElementById("dynamicstepformstatusstep"+(indexStep+1)).classList.remove("bg-green-400");
+        setTimeout(() => {
+            document.getElementById(this.dynamicsteps.steps[indexStep].element).classList.remove("translate-x-full");
+        }, 200);
+
+        if(this.dynamicsteps.currentStepIndex === this.dynamicsteps.steps.length-1)
+            document.getElementById("dynamicstepformButtonName").innerText = "Complete";
+        else
+            document.getElementById("dynamicstepformButtonName").innerText = "Next Step";
     }
 
 }
