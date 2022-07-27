@@ -12,6 +12,7 @@ npm install dynamicstepform
 ```
 
 # Usage
+This package need tailwindcss for now to work
 
 ```javascript
 let element = document.getElementById("stepformdiv");
