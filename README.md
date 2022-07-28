@@ -38,7 +38,7 @@ stepform.create(element);
 
 ```javascript
 // to create a new stepform
-stepform.reset();
+stepform.create();
 
 // next step
 stepform.nextStep();
@@ -50,7 +50,7 @@ stepform.backStep();
 stepform.clearStep();
 
 // reset stepform
-stepform.nextStep();
+stepform.reset();
 ```
 
 # Contributing
