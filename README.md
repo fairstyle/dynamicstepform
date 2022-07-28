@@ -33,6 +33,9 @@ stepform.steps([
         "clearStep": () => {console.log("clear step 3");return true;}
     }
 ]);
+stepform.opts({
+    customAccessVarName: "stepform" // Optional
+});
 stepform.create(element);
 ```
 
