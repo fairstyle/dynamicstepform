@@ -10,7 +10,8 @@ class Dynamicstepform {
         styleMotor: "tailwindcss",
         element: null,
         resetEnabled: false,
-        backEnabled: false
+        backEnabled: false,
+        flexEnabled: false
     }
 
     snippetElements = {
@@ -41,7 +42,7 @@ class Dynamicstepform {
             return false;
         else
             this.dynamicsteps.correctCreate = true;
-        console.log(this.dynamicsteps.customAccessVarName)
+
         let nextStepButton = '<div class="text-center py-3"><button onclick="'+(this.dynamicsteps.customAccessVarName ? this.dynamicsteps.customAccessVarName:"new Dynamicstepform()" )+'.nextStep()" class="bg-green-400 text-white font-black p-3 hover:bg-green-600 hover:text-gray-100 rounded">'+
             '<svg style="width:20px;height:16px;" class="inline-block svg-inline--fa fa-circle-chevron-right pr-1" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle-chevron-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM358.6 278.6l-112 112c-12.5 12.5-32.75 12.5-45.25 0s-12.5-32.75 0-45.25L290.8 256L201.4 166.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l112 112C364.9 239.6 368 247.8 368 256S364.9 272.4 358.6 278.6z"></path></svg><span id="dynamicstepformButtonName">Next Step</span></button></div>';
 
@@ -52,7 +53,7 @@ class Dynamicstepform {
             if(createdStep !== 1)
                 document.getElementById(step.element).classList.add("hidden");
 
-            document.getElementById(step.element).classList.add("duration-200", "transform", "transition-transform", "translate-x-full", "z-["+createdStep+"]", "flex");
+            document.getElementById(step.element).classList.add("duration-200", "transform", "transition-transform", "translate-x-full", "z-["+createdStep+"]", this.dynamicsteps.flexEnabled ? "flex" : "");
 
             htmlContent += '<div id="dynamicstepformstatusstep'+createdStep+'" class="duration-200 bg-white border border-gray-400 w-8 h-8 rounded-full text-gray-500 font-black flex justify-center items-center">'+createdStep+'</div>';
             createdStep++;
