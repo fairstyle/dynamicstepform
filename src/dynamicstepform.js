@@ -80,11 +80,11 @@ class Dynamicstepform {
         this.dynamicsteps.customAccessVarName = opts.customAccessVarName;
     }
 
-    nextStep(){
+    async nextStep(){
         if(!this.dynamicsteps.correctCreate)
             return false;
 
-        if(this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex].call !== undefined && !this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex].call())
+        if(this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex].call !== undefined && await !this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex].call())
             return false;
 
         if(this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex].call === undefined)
