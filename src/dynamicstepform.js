@@ -53,7 +53,10 @@ class Dynamicstepform {
             if(createdStep !== 1)
                 document.getElementById(step.element).classList.add("hidden");
 
-            document.getElementById(step.element).classList.add("duration-200", "transform", "transition-transform", "translate-x-full", "z-["+createdStep+"]", this.dynamicsteps.flexEnabled ? "flex" : "");
+            let classListToAdd = ["duration-200", "transform", "transition-transform", "translate-x-full", "z-["+createdStep+"]"]
+            if(this.dynamicsteps.flexEnabled)
+                classListToAdd.push("flex");
+            document.getElementById(step.element).classList.add(...classListToAdd);
 
             htmlContent += '<div id="dynamicstepformstatusstep'+createdStep+'" class="duration-200 bg-white border border-gray-400 w-8 h-8 rounded-full text-gray-500 font-black flex justify-center items-center">'+createdStep+'</div>';
             createdStep++;
