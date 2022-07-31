@@ -81,7 +81,9 @@ class Dynamicstepform {
     }
 
     async nextStep(){
-        console.log("nextStepLoading = "+this.dynamicsteps.nextStepLoading)
+        if(this.dynamicsteps.nextStepLoading)
+            console.log("is currently loading");
+
         if(!this.dynamicsteps.correctCreate || this.dynamicsteps.nextStepLoading)
             return false;
 
@@ -89,7 +91,6 @@ class Dynamicstepform {
         this.dynamicsteps.nextStepLoading = true;
 
         if(this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex].call !== null){
-            console.log(this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex].call)
             response = await Promise.all([this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex].call()]).then((value) => {
                 return value[0];
             });

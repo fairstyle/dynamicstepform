@@ -21,11 +21,11 @@ let stepform = new Dynamicstepform();
 stepform.steps([
     {
         "element": "stepone", 
-        "call": () => {console.log("step 1");return true;}, 
+        "call": resolveAfter3Seconds, //Promisse example
         "clearStep": () => {console.log("clear step 1");return true;}
     },{
         "element": "steptwo", 
-        "call": () => {console.log("step 2");return true;}, 
+        "call": resolveAfterResponse,  //Promisse example
         "clearStep": () => {console.log("clear step 2");return true;}
     },{
         "element": "stepthree", 
@@ -38,6 +38,41 @@ stepform.opts({
 });
 stepform.create(element);
 ```
+
+### Example calls
+Example calls for validate steps with promises
+
+```javascript
+function resolveAfter3Seconds() {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            console.log("a");
+            resolve(true);
+        }, 3000);
+    });
+}
+
+function resolveAfterResponse() {
+    return new Promise(async resolve => {
+        let json = await fetch("localhost", {
+            method: 'GET',
+            headers: new Headers({
+                'Access-Control-Allow-Origin': '*',
+            }),
+        }).then(res => res)
+            .catch(error => {
+                console.log(error)
+            })
+            .then(response => {
+                return response;
+            });
+        resolve(json.status === 200);
+    });
+}
+```
+
+### Utils Methods
+Methods for manipulating steps
 
 ```javascript
 // to create a new stepform
