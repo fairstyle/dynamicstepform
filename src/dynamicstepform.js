@@ -155,3 +155,5 @@ class Dynamicstepform {
     }
 
 }
+
+module.exports =  Dynamicstepform;
