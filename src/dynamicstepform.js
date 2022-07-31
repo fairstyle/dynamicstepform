@@ -81,21 +81,27 @@ class Dynamicstepform {
     }
 
     async nextStep(){
-        if(!this.dynamicsteps.correctCreate)
+        console.log("nextStepLoading = "+this.dynamicsteps.nextStepLoading)
+        if(!this.dynamicsteps.correctCreate || this.dynamicsteps.nextStepLoading)
             return false;
 
-        if(this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex].call !== undefined && await !this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex].call())
-            return false;
+        let response = true;
+        this.dynamicsteps.nextStepLoading = true;
 
-        if(this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex].call === undefined)
-            console.log("no validation");
+        if(this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex].call !== null){
+            console.log(this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex].call)
+            response = await Promise.all([this.dynamicsteps.steps[this.dynamicsteps.currentStepIndex].call()]).then((value) => {
+                return value[0];
+            });
+        }
 
-        if(this.dynamicsteps.steps.length-1 > this.dynamicsteps.currentStepIndex){
+        if(response && this.dynamicsteps.steps.length-1 > this.dynamicsteps.currentStepIndex){
             this.markAsDone(this.dynamicsteps.currentStepIndex);
             this.snippetElements.currentStep.classList.add("hidden");
             this.snippetElements.currentStep.classList.add("-translate-x-full");
             this.markAsCurrent(this.dynamicsteps.currentStepIndex+1);
         }
+        this.dynamicsteps.nextStepLoading = false;
     }
 
     backStep(){
